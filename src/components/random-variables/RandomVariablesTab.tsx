@@ -106,6 +106,79 @@ export default function RandomVariablesTab() {
     URL.revokeObjectURL(url);
   };
 
+  const chartDataDensidad = result ? {
+    datasets: [
+      {
+        label: 'Puntos Aceptados',
+        data: result.chart_data.x_d.map((x, i) => ({ 
+          x: x, 
+          y: result.chart_data.y_d[i] 
+        })).filter((_, i) => result.chart_data.accepted[i]),
+        backgroundColor: 'rgba(34, 197, 94, 0.6)',
+        borderColor: 'rgba(34, 197, 94, 1)',
+        pointRadius: 3,
+        showLine: false
+      },
+      {
+        label: 'Puntos Rechazados',
+        data: result.chart_data.x_d.map((x, i) => ({ 
+          x: x, 
+          y: result.chart_data.y_d[i] 
+        })).filter((_, i) => !result.chart_data.accepted[i]),
+        backgroundColor: 'rgba(239, 68, 68, 0.6)',
+        borderColor: 'rgba(239, 68, 68, 1)',
+        pointRadius: 3,
+        showLine: false
+      },
+      {
+        label: 'Función de densidad f(x) = 2x',
+        data: Array.from({ length: 100 }, (_, i) => {
+          const x = i / 99;
+          return { x: x, y: 2 * x };
+        }),
+        borderColor: 'rgba(59, 130, 246, 1)',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        borderWidth: 2,
+        pointRadius: 0,
+        showLine: true,
+        fill: true
+      }
+    ]
+  } : null;
+
+  const chartOptionsDensidad = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Método de Aceptación-Rechazo para f(x) = 2x'
+      }
+    },
+    scales: {
+      x: {
+        type: 'linear' as const,
+        position: 'bottom' as const,
+        title: {
+          display: true,
+          text: 'x'
+        },
+        min: 0,
+        max: 1
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'y'
+        },
+        min: 0,
+        max: 2.5
+      }
+    }
+  };
+
   // Configuración del gráfico
   const chartData = result ? {
     datasets: [
@@ -280,6 +353,12 @@ export default function RandomVariablesTab() {
             {chartData && (
               <div className="h-96">
                 <Line data={chartData} options={chartOptions} />
+              </div>
+            )}
+
+            {chartDataDensidad && (
+              <div className="h-96">
+                <Line data={chartDataDensidad} options={chartOptionsDensidad} />
               </div>
             )}
           </div>
