@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Play, Download, Eye, EyeOff } from 'lucide-react';
-import { GenerationMethod, GenerationResponse } from '../../types';
+import { Play, Download, Eye, EyeOff, CheckCircle, XCircle } from 'lucide-react';
+import { GenerationMethod, GenerationResponse, ValidationResponse } from '../../types';
 import { apiService } from '../../services/api';
 import ErrorMessage from '../common/ErrorMessage';
 import LoadingSpinner from '../common/LoadingSpinner';
@@ -46,6 +46,8 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
   const [showAllNumbers, setShowAllNumbers] = useState(false);
+  const [showAllNormalized, setShowAllNormalized] = useState(false);
+  const [result, setResult] = useState<ValidationResponse | null>(null);
 
   const currentMethod = METHODS.find(m => m.id === selectedMethod);
 
@@ -114,6 +116,17 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
         parameters: numericParameters
       });
 
+      const result = await apiService.validateConditions({
+        method: selectedMethod,
+        parameters: {
+          a: numericParameters.a,
+          b: numericParameters.b,
+          m: numericParameters.m,
+        }
+      });
+
+      setResult(result);
+
       onGenerationComplete(response);
       setShowAllNumbers(false);
     } catch (err: any) {
@@ -149,6 +162,9 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
 
   const displayNumbers = generatedData ? 
     (showAllNumbers ? generatedData.numbers : generatedData.numbers.slice(0, 20)) : [];
+
+  const displayNumbersNormalized = generatedData ? 
+    (showAllNormalized ? generatedData.normalizedNumbers : generatedData.normalizedNumbers.slice(0, 20)) : [];
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -255,11 +271,35 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
             )}
           </div>
 
-          {/* Lista de números */}
+          {/* Conditions */}
+          {result && result.conditions.length > 0 && (
+            <div >
+              <h4 className="font-medium text-gray-900">
+                Condiciones del Método {currentMethod?.name}
+              </h4>
+
+              <div className="space-y-3">
+                {result.conditions.map((condition) => (
+                  <div key={condition.name} className="flex items-center gap-3">
+                    {condition.satisfied ? (
+                      <CheckCircle className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <XCircle className="w-5 h-5 text-red-500" />
+                    )}
+                    <span className={condition.satisfied ? 'text-green-700' : 'text-red-700'}>
+                      {condition.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Secuencia de Números */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="font-medium text-gray-900">
-                Números Generados {!showAllNumbers && generatedData.numbers.length > 20 && `(Mostrando primeros 20 de ${generatedData.numbers.length})`}
+                Secuencia Generada {!showAllNumbers && generatedData.numbers.length > 20 && `(Mostrando primeros 20 de ${generatedData.numbers.length})`}
               </h4>
               {generatedData.numbers.length > 20 && (
                 <button
@@ -282,6 +322,35 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
               </div>
             </div>
           </div>
+
+          {/* Números Aleatorios */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h4 className="font-medium text-gray-900">
+              Números Aleatorios Generados {!showAllNormalized && generatedData.normalizedNumbers.length > 20 && `(Mostrando primeros 20 de ${generatedData.normalizedNumbers.length})`}
+              </h4>
+              {generatedData.normalizedNumbers.length > 20 && (
+                <button
+                  onClick={() => setShowAllNormalized(!showAllNormalized)}
+                  className="flex items-center space-x-2 text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors"
+                >
+                  {showAllNormalized ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  <span>{showAllNormalized ? 'Mostrar menos' : 'Ver todos'}</span>
+                </button>
+              )}
+            </div>
+            
+            <div className="bg-gray-50 p-4 rounded-lg max-h-96 overflow-y-auto">
+              <div className="grid grid-cols-5 md:grid-cols-10 gap-2 text-sm font-mono">
+                {displayNumbersNormalized.map((num, index) => (
+                  <div key={index} className="bg-white px-2 py-1 rounded text-center">
+                    {num}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
         </div>
       )}
     </div>

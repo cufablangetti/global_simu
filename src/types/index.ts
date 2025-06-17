@@ -19,6 +19,7 @@ export interface GenerationRequest {
 
 export interface GenerationResponse {
   numbers: number[];
+  normalizedNumbers: number[];
   statistics: {
     count: number;
     min: number;
