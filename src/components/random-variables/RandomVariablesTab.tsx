@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Zap, BarChart3, Download } from 'lucide-react';
 import { RandomVariableResponse } from '../../types';
 import { apiService } from '../../services/api';
@@ -111,34 +111,45 @@ export default function RandomVariablesTab() {
     datasets: [
       {
         label: 'Puntos Aceptados',
-        data: result.chart_data.x.map((x, i) => ({ 
-          x: x, 
-          y: result.chart_data.y[i] 
+        data: result.chart_data.x.map((x, i) => ({
+          x: x,
+          y: result.chart_data.y[i]
         })).filter((_, i) => result.chart_data.accepted[i]),
-        backgroundColor: 'rgba(34, 197, 94, 0.6)',
-        borderColor: 'rgba(34, 197, 94, 1)',
+        backgroundColor: 'rgba(67, 170, 139, 1.0)',
+        borderColor: 'rgba(67, 170, 139, 1.0)',
         pointRadius: 3,
         showLine: false
       },
       {
         label: 'Puntos Rechazados',
-        data: result.chart_data.x.map((x, i) => ({ 
-          x: x, 
-          y: result.chart_data.y[i] 
+        data: result.chart_data.x.map((x, i) => ({
+          x: x,
+          y: result.chart_data.y[i]
         })).filter((_, i) => !result.chart_data.accepted[i]),
-        backgroundColor: 'rgba(239, 68, 68, 0.6)',
-        borderColor: 'rgba(239, 68, 68, 1)',
+        backgroundColor: 'rgba(249, 65, 68, 1.0)',
+        borderColor: 'rgba(249, 65, 68, 1.0)',
         pointRadius: 3,
         showLine: false
       },
       {
-        label: 'Función de densidad f(x) = 2x',
-        data: Array.from({ length: 100 }, (_, i) => {
-          const x = i / 99;
-          return { x: x, y: 2 * x };
-        }),
-        borderColor: 'rgba(59, 130, 246, 1)',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        label: 'f(x) / M',
+        data: result.chart_data.x.map((x, i) => ({
+          x: x,
+          y: result.chart_data.y[i]
+        })),
+        backgroundColor: 'rgba(244, 162, 97, 0.2)',
+        borderColor: 'rgba(244, 162, 97, 1.0)',
+        pointRadius: 3,
+        showLine: true
+      },
+      {
+        label: 'r2',
+        data: result.chart_data.r2.map((y, i) => ({
+          x: result.chart_data.x[i],
+          y: y
+        })),
+        backgroundColor: 'rgba(42, 157, 143, 0.2)',
+        borderColor: 'rgba(42, 157, 143, 1.0)',
         borderWidth: 2,
         pointRadius: 0,
         showLine: true,
@@ -166,8 +177,8 @@ export default function RandomVariablesTab() {
           display: true,
           text: 'x'
         },
-        min: 0,
-        max: 1
+        min: 1,
+
       },
       y: {
         title: {
@@ -175,7 +186,7 @@ export default function RandomVariablesTab() {
           text: 'y'
         },
         min: 0,
-        max: 2.5
+        max: 1
       }
     }
   };
@@ -184,7 +195,7 @@ export default function RandomVariablesTab() {
     <div className="max-w-6xl mx-auto p-6 space-y-6">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Variables Aleatorias - Método de Aceptación-Rechazo</h2>
-        
+
         <div className="mb-6 p-4 bg-blue-50 rounded-lg">
           <h3 className="font-semibold text-blue-900 mb-2">Función de densidad: f(x) = 2x</h3>
           <p className="text-blue-800 text-sm">
@@ -265,7 +276,7 @@ export default function RandomVariablesTab() {
               <BarChart3 className="w-5 h-5 mr-2" />
               Visualización del Método de Aceptación-Rechazo
             </h3>
-            
+
             {chartData && (
               <div className="h-96">
                 <Line data={chartData} options={chartOptions} />
