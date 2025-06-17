@@ -71,6 +71,9 @@ export interface RandomVariableResponse {
   chart_data: {
     x: number[];
     y: number[];
+    r2: number[];
     accepted: boolean[];
+    x_d: number[];
+    y_d: number[];
   };
 }
