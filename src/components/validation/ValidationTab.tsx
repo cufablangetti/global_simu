@@ -297,9 +297,6 @@ export default function ValidationTab({ generatedData, selectedMethod, parameter
                 <div className="space-y-2 text-sm">
                   <div><strong>Valor calculado:</strong> {ksResult.calculated_value.toFixed(4)}</div>
                   <div><strong>Valor crítico:</strong> {ksResult.critical_value.toFixed(4)}</div>
-                  {ksResult.p_value !== undefined && (
-                    <div><strong>P-valor:</strong> {ksResult.p_value.toFixed(4)}</div>
-                  )}
                   <div><strong>Resultado:</strong> 
                     <span className={`ml-2 font-semibold ${ksResult.passes ? 'text-green-700' : 'text-red-700'}`}>
                       {ksResult.passes ? 'PASA' : 'NO PASA'}

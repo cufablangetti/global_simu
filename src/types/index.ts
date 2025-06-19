@@ -54,7 +54,6 @@ export interface StatisticalTestResponse {
   calculated_value: number;
   critical_value: number;
   passes: boolean;
-  p_value?: number;
   details: string;
 }
 

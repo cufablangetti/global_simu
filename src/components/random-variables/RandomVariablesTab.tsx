@@ -281,6 +281,7 @@ export default function RandomVariablesTab() {
             <option value="cuadratic">f(x) = -(x-2)^2 + 4 | Dominio: [0, 4]</option>
             <option value="hyperbola">f(x) = 1/x | Dominio: (0.5, 3)</option>
           </select>
+          <p className='text-sm text-blue-600 mt-2'>Se utiliza g(x) = 1</p>
         </div>
 
 

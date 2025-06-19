@@ -115,7 +115,7 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
         method: selectedMethod,
         parameters: numericParameters
       });
-      if(selectedMethod === 'mixed_congruential' || selectedMethod === 'multiplicative_congruential'){
+      if(selectedMethod === 'mixed_congruential'){
         const result = await apiService.validateConditions({
           method: selectedMethod,
           parameters: {
@@ -276,7 +276,7 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
           </div>
 
           {/* Conditions */}
-          { (selectedMethod === 'mixed_congruential' || selectedMethod === 'multiplicative_congruential') && result && result.conditions.length > 0 && (
+          { (selectedMethod === 'mixed_congruential') && result && result.conditions.length > 0 && (
             <div className="mb-4">
               <h4 className="font-medium text-gray-900 pb-3">
                 Condiciones del Método {currentMethod?.name}
@@ -328,7 +328,7 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
           </div>
 
           {/* Números Aleatorios */}
-          <div className="space-y-4">
+          <div className="space-y-4 mt-4">
             <div className="flex items-center justify-between">
               <h4 className="font-medium text-gray-900">
               Números Aleatorios Generados {!showAllNormalized && generatedData.normalizedNumbers.length > 20 && `(Mostrando primeros 20 de ${generatedData.normalizedNumbers.length})`}

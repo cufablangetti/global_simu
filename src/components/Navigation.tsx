@@ -12,13 +12,13 @@ export default function Navigation({ activeTab, onTabChange }: NavigationProps) 
       id: 'generation' as const,
       name: 'Generación',
       icon: Calculator,
-      description: 'Generar números pseudoaleatorios'
+      description: 'Métodos congruenciales y cuadrados medios'
     },
     {
       id: 'validation' as const,
       name: 'Comprobación',
       icon: CheckCircle,
-      description: 'Validar condiciones y pruebas estadísticas'
+      description: 'Prueba Chi-Cuadrada y Kolmogorov-Smirnov'
     },
     {
       id: 'random-variables' as const,

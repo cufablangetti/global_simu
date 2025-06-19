@@ -47,10 +47,10 @@ function App() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
-                Generador de Números Pseudoaleatorios
+                Números Aleatorios
               </h1>
               <p className="text-sm text-gray-600">
-                Métodos congruenciales, cuadrados medios y variables aleatorias
+                Generación de números pseudoaleatorios, Pruebas estadísticas y Variables Aleatorias
               </p>
             </div>
             
