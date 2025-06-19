@@ -29,6 +29,7 @@ ChartJS.register(
 );
 
 export default function RandomVariablesTab() {
+  const [selectedFunction, setSelectedFunction] = useState<string>('linear');
   const [count, setCount] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
@@ -65,7 +66,7 @@ export default function RandomVariablesTab() {
       const response = await apiService.generateRandomVariables({
         count: parseInt(count),
         method: 'acceptance_rejection',
-        distribution: 'triangular'
+        fx: selectedFunction
       });
 
       setResult(response);
@@ -110,9 +111,9 @@ export default function RandomVariablesTab() {
     datasets: [
       {
         label: 'Puntos Aceptados',
-        data: result.chart_data.x_d.map((x, i) => ({ 
-          x: x, 
-          y: result.chart_data.y_d[i] 
+        data: result.chart_data.x_d.map((x, i) => ({
+          x: x,
+          y: result.chart_data.y_d[i]
         })).filter((_, i) => result.chart_data.accepted[i]),
         backgroundColor: 'rgba(34, 197, 94, 0.6)',
         borderColor: 'rgba(34, 197, 94, 1)',
@@ -121,9 +122,9 @@ export default function RandomVariablesTab() {
       },
       {
         label: 'Puntos Rechazados',
-        data: result.chart_data.x_d.map((x, i) => ({ 
-          x: x, 
-          y: result.chart_data.y_d[i] 
+        data: result.chart_data.x_d.map((x, i) => ({
+          x: x,
+          y: result.chart_data.y_d[i]
         })).filter((_, i) => !result.chart_data.accepted[i]),
         backgroundColor: 'rgba(239, 68, 68, 0.6)',
         borderColor: 'rgba(239, 68, 68, 1)',
@@ -132,10 +133,10 @@ export default function RandomVariablesTab() {
       },
       {
         label: 'Función de densidad f(x) = 2x',
-        data: Array.from({ length: 100 }, (_, i) => {
-          const x = i / 99;
-          return { x: x, y: 2 * x };
-        }),
+        data: result.chart_data.points_fx_d.map((y, i) => ({
+          x: result.chart_data.points_x_d[i],
+          y: y
+        })),
         borderColor: 'rgba(59, 130, 246, 1)',
         backgroundColor: 'rgba(59, 130, 246, 0.1)',
         borderWidth: 2,
@@ -165,8 +166,8 @@ export default function RandomVariablesTab() {
           display: true,
           text: 'x'
         },
-        min: 0,
-        max: 1
+        min: result ? result.chart_data.a : 0,
+        max: result ? result.chart_data.b : 2.5
       },
       y: {
         title: {
@@ -174,7 +175,7 @@ export default function RandomVariablesTab() {
           text: 'y'
         },
         min: 0,
-        max: 2.5
+        max: result ? result.chart_data.M : 1.0
       }
     }
   };
@@ -239,7 +240,7 @@ export default function RandomVariablesTab() {
       },
       title: {
         display: true,
-        text: 'Método de Aceptación-Rechazo para f(x) = 2x'
+        text: `Método de Aceptación-Rechazo para ${result ? result.chart_data.function_name : 'f(x)'}`
       }
     },
     scales: {
@@ -269,12 +270,19 @@ export default function RandomVariablesTab() {
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Variables Aleatorias - Método de Aceptación-Rechazo</h2>
 
-        <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-          <h3 className="font-semibold text-blue-900 mb-2">Función de densidad: f(x) = 2x</h3>
-          <p className="text-blue-800 text-sm">
-            Dominio: [0, 1] | Método: Aceptación-Rechazo con distribución uniforme como función auxiliar
-          </p>
+        <div className="mb-6 p-6 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl shadow-md">
+          <h3 className="text-lg font-bold text-blue-800 mb-4">Selecciona una función de densidad:</h3>
+          <select
+            value={selectedFunction}
+            onChange={(e) => setSelectedFunction(e.target.value)}
+            className="w-full p-3 bg-white border border-blue-300 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200"
+          >
+            <option value="linear">f(x) = 2x | Dominio: [0, 1]</option>
+            <option value="cuadratic">f(x) = -(x-2)^2 + 4 | Dominio: [0, 4]</option>
+            <option value="hyperbola">f(x) = 1/x | Dominio: (0.5, 3)</option>
+          </select>
         </div>
+
 
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-3">

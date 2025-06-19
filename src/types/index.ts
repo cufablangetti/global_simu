@@ -61,7 +61,7 @@ export interface StatisticalTestResponse {
 export interface RandomVariableRequest {
   count: number;
   method: 'acceptance_rejection';
-  distribution: string;
+  fx: string;
 }
 
 export interface RandomVariableResponse {
@@ -76,5 +76,11 @@ export interface RandomVariableResponse {
     accepted: boolean[];
     x_d: number[];
     y_d: number[];
+    points_fx_d: number[];
+    points_x_d: number[];
+    a: number;
+    b: number;
+    M: number;
+    function_name: string;
   };
 }
