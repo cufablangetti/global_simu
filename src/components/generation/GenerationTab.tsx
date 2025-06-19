@@ -146,8 +146,11 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
       `Total generados: ${generatedData.statistics.count}`,
       `Razón de parada: ${generatedData.statistics.stopped_reason}`,
       '',
-      'Números generados:',
-      ...generatedData.numbers.map((num, index) => `${index + 1}: ${num}`)
+      'Secuencia generados:',
+      ...generatedData.numbers.map((num, index) => `${index + 1}: ${num}`),
+      '',
+      'Números Aleatorios Generados: ',
+      ...generatedData.normalizedNumbers.map((num, index) => `${index + 1}: ${num}`),
     ].join('\n');
 
     const blob = new Blob([content], { type: 'text/plain' });
