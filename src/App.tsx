@@ -86,9 +86,7 @@ function App() {
             </div>
             <div className="ml-3">
               <p className="text-sm text-red-700">
-                <strong>Sin conexión al backend:</strong> Asegúrese de que el servidor Python esté ejecutándose en el puerto 8000.
-                <br />
-                Ejecute: <code className="bg-red-100 px-1 rounded">cd backend && python -m uvicorn main:app --reload --port 8000</code>
+                <strong>Sin conexión al backend:</strong> Asegúrese de que el servidor Python esta ejecutándose.
               </p>
             </div>
           </div>

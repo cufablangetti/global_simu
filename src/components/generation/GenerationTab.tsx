@@ -115,17 +115,18 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
         method: selectedMethod,
         parameters: numericParameters
       });
-
-      const result = await apiService.validateConditions({
-        method: selectedMethod,
-        parameters: {
-          a: numericParameters.a,
-          b: numericParameters.b,
-          m: numericParameters.m,
-        }
-      });
-
-      setResult(result);
+      if(selectedMethod === 'mixed_congruential' || selectedMethod === 'multiplicative_congruential'){
+        const result = await apiService.validateConditions({
+          method: selectedMethod,
+          parameters: {
+            a: numericParameters.a,
+            b: numericParameters.b,
+            m: numericParameters.m,
+          }
+        });
+  
+        setResult(result);
+      }
 
       onGenerationComplete(response);
       setShowAllNumbers(false);
@@ -272,9 +273,9 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
           </div>
 
           {/* Conditions */}
-          {result && result.conditions.length > 0 && (
-            <div >
-              <h4 className="font-medium text-gray-900">
+          { (selectedMethod === 'mixed_congruential' || selectedMethod === 'multiplicative_congruential') && result && result.conditions.length > 0 && (
+            <div className="mb-4">
+              <h4 className="font-medium text-gray-900 pb-3">
                 Condiciones del Método {currentMethod?.name}
               </h4>
 
