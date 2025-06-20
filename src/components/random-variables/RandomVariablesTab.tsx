@@ -155,7 +155,7 @@ export default function RandomVariablesTab() {
       },
       title: {
         display: true,
-        text: 'Método de Aceptación-Rechazo para f(x) = 2x'
+        text: `Método de Aceptación-Rechazo para ${result ? result.chart_data.function_name : 'f(x)'}`
       }
     },
     scales: {
@@ -279,7 +279,7 @@ export default function RandomVariablesTab() {
           >
             <option value="linear">f(x) = 2x | Dominio: [0, 1]</option>
             <option value="cuadratic">f(x) = -(x-2)^2 + 4 | Dominio: [0, 4]</option>
-            <option value="hyperbola">f(x) = 1/x | Dominio: (0.5, 3)</option>
+            <option value="hyperbola">f(x) = 1/x | Dominio: [0.5, 3]</option>
           </select>
           <p className='text-sm text-blue-600 mt-2'>Se utiliza g(x) = 1</p>
         </div>
