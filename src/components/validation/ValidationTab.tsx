@@ -17,6 +17,7 @@ export default function ValidationTab({ selectedMethod, parameters }: Validation
   const [validationError, setValidationError] = useState<string>('');
 
   const [chiSquareIntervals, setChiSquareIntervals] = useState<string>('');
+  const [chiSquareAlpha, setChiSquareAlpha] = useState<string>('0.05');
   const [ksSignificance, setKsSignificance] = useState<string>('0.05');
   const [chiSquareResult, setChiSquareResult] = useState<StatisticalTestResponse | null>(null);
   const [ksResult, setKsResult] = useState<StatisticalTestResponse | null>(null);
@@ -78,8 +79,9 @@ export default function ValidationTab({ selectedMethod, parameters }: Validation
       const response = await apiService.runStatisticalTest({
         numbers: numbers,
         test_type: 'chi_square',
-        parameters: { intervals }
+        parameters: { intervals, chiSquareAlpha: parseFloat(chiSquareAlpha) }
       });
+      console.log(response)
       setChiSquareResult(response);
     } catch (err: any) {
       setTestErrors(prev => ({ ...prev, chi: err.response?.data?.detail || 'Error en prueba Chi-cuadrado' }));
@@ -226,13 +228,6 @@ export default function ValidationTab({ selectedMethod, parameters }: Validation
                     min="2"
                     className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
-                  <button
-                    onClick={runChiSquareTest}
-                    disabled={testLoading.chi || !chiSquareIntervals}
-                    className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center"
-                  >
-                    {testLoading.chi ? <LoadingSpinner size="sm" /> : 'Ejecutar'}
-                  </button>
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -246,9 +241,34 @@ export default function ValidationTab({ selectedMethod, parameters }: Validation
                       {interval}
                     </button>
                   ))}
-                  <span className="text-sm text-gray-600">Usando un α = 0.05</span>
                 </div>
               </div>
+
+              {/* Nivel de significancia Alpha */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nivel de significancia α
+                </label>
+                <select
+                  value={chiSquareAlpha}
+                  onChange={(e) => setChiSquareAlpha(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  {significanceOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <button
+                onClick={runChiSquareTest}
+                disabled={testLoading.chi || !chiSquareIntervals}
+                className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center"
+              >
+                {testLoading.chi ? <LoadingSpinner size="sm" /> : 'Ejecutar'}
+              </button>
 
               {testErrors.chi && <ErrorMessage message={testErrors.chi} />}
 

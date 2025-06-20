@@ -279,7 +279,7 @@ export default function GenerationTab({ onGenerationComplete, generatedData }: G
           { (selectedMethod === 'mixed_congruential') && result && result.conditions.length > 0 && (
             <div className="mb-4">
               <h4 className="font-medium text-gray-900 pb-3">
-                Condiciones del Método {currentMethod?.name}
+                Condiciones del Método {currentMethod?.name} para Ciclo Completo
               </h4>
 
               <div className="space-y-3">
