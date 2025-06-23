@@ -15,6 +15,7 @@ export default function ValidationTab({ selectedMethod, parameters }: Validation
   const [validationData, setValidationData] = useState<ValidationResponse | null>(null);
   const [validationLoading, setValidationLoading] = useState(false);
   const [validationError, setValidationError] = useState<string>('');
+  const [inputMessage, setInputMessage] = useState<string>('');
 
   const [chiSquareIntervals, setChiSquareIntervals] = useState<string>('');
   const [chiSquareAlpha, setChiSquareAlpha] = useState<string>('0.05');
@@ -123,14 +124,18 @@ export default function ValidationTab({ selectedMethod, parameters }: Validation
     const textarea = e.currentTarget.querySelector('textarea') as HTMLTextAreaElement;
     const inputNumbers = textarea.value
       .split('\n')
-      .map(num => num.trim())
+      .map(num => num.trim().replace(',', '.')) 
       .filter(num => !isNaN(Number(num)) && Number(num) !== 0)
       .map(num => Number(num));
+
+      console.log(inputNumbers)
     if (inputNumbers.length === 0) {
       setValidationError('Debe ingresar al menos un número válido');
       return;
     }
     setNumbers(inputNumbers);
+    setInputMessage('Números guardados correctamente');
+    setTimeout(() => setInputMessage(''), 2000);
     setValidationError('');
   }
 
@@ -140,6 +145,8 @@ export default function ValidationTab({ selectedMethod, parameters }: Validation
       <form onSubmit={handleSubmitNumbers} className="w-80 h-240 flex flex-col justify-center items-center bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-6">Ingrese numeros a analizar</h2>
         <textarea className='flex-1 border w-full rounded-xl p-2' rows={4} cols={50}></textarea>
+        {inputMessage && (
+          <p className="mt-4 text-sm text-green-600">{inputMessage}</p>)}
         <button
           className="px-4 py-3 mt-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center"
         >Guardar</button>
