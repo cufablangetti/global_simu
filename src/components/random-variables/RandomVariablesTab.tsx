@@ -132,7 +132,7 @@ export default function RandomVariablesTab() {
         showLine: false
       },
       {
-        label: 'Función de densidad f(x) = 2x',
+        label: 'Función de densidad f(x)',
         data: result.chart_data.points_fx_d.map((y, i) => ({
           x: result.chart_data.points_x_d[i],
           y: y
