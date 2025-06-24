@@ -75,6 +75,7 @@ export interface RandomVariableRequestV2 {
 export interface RandomVariableResponse {
   r1: number[];
   r2: number[];
+  M: number;
   generated_values: number[];
   acceptance_rate: number;
   chart_data: {

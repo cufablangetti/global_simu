@@ -89,6 +89,7 @@ export default function RandomVariablesTab() {
 
     const content = [
       'Variables Aleatorias - Método de Aceptación-Rechazo',
+      `M: ${result.M}`,
       `Cantidad solicitada: ${count}`,
       `Tasa de aceptación: ${(result.acceptance_rate * 100).toFixed(2)}%`,
       `Valores generados: ${result.generated_values.length}`,
@@ -281,6 +282,7 @@ export default function RandomVariablesTab() {
           <h3 className="text-lg font-bold text-blue-800 mb-4">Selecciona una función de densidad:</h3>
           <input
             type="text"
+            
             value={selectedFunction}
             onChange={(e) => setSelectedFunction(e.target.value)}
             className="w-full p-3 bg-white border border-blue-300 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200"
@@ -291,6 +293,7 @@ export default function RandomVariablesTab() {
               <label className="text-base font-semibold text-blue-700 mb-2">a</label>
               <input
                 type="number"
+                step={"any"}
                 value={a}
                 onChange={(e) => setA(+e.target.value)}
                 className="w-full px-4 py-2 border border-blue-300 rounded-xl bg-white text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
@@ -302,6 +305,7 @@ export default function RandomVariablesTab() {
               <label className="text-base font-semibold text-blue-700 mb-2">b</label>
               <input
                 type="number"
+                step={"any"}
                 value={b}
                 onChange={(e) => setB(+e.target.value)}
                 className="w-full px-4 py-2 border border-blue-300 rounded-xl bg-white text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
@@ -374,7 +378,11 @@ export default function RandomVariablesTab() {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <div className="text-2xl font-bold text-yellow-700">{result.M}</div>
+                <div className="text-sm text-yellow-600">M</div>
+              </div>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="text-2xl font-bold text-gray-900">{result.r1.length}</div>
                 <div className="text-sm text-gray-600">R1 Generados</div>
