@@ -309,7 +309,7 @@ export default function RandomVariablesTab() {
             </div>
 
             {/* Campo M */}
-            <div className="flex-1 flex flex-col">
+            {/* <div className="flex-1 flex flex-col">
               <label className="text-base font-semibold text-blue-700 mb-2">M</label>
               <input
                 type="number"
@@ -317,7 +317,7 @@ export default function RandomVariablesTab() {
                 onChange={(e) => setM(+e.target.value)}
                 className="w-full px-4 py-2 border border-blue-300 rounded-xl bg-white text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
               />
-            </div>
+            </div> */}
           </div>
 
 
