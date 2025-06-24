@@ -1,12 +1,13 @@
 import axios from 'axios';
-import { 
-  GenerationRequest, 
-  GenerationResponse, 
+import {
+  GenerationRequest,
+  GenerationResponse,
   ValidationResponse,
   StatisticalTestRequest,
   StatisticalTestResponse,
   RandomVariableRequest,
-  RandomVariableResponse
+  RandomVariableResponse,
+  RandomVariableRequestV2
 } from '../types';
 
 const API_BASE_URL = 'http://localhost:8000';
@@ -40,6 +41,11 @@ export const apiService = {
   // Variables aleatorias
   generateRandomVariables: async (request: RandomVariableRequest): Promise<RandomVariableResponse> => {
     const response = await api.post('/random-variables', request);
+    return response.data;
+  },
+
+  generateRandomVariablesv2: async (request: RandomVariableRequestV2): Promise<RandomVariableResponse> => {
+    const response = await api.post('/random-variablesV2', request);
     return response.data;
   },
 

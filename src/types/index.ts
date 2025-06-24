@@ -63,6 +63,15 @@ export interface RandomVariableRequest {
   fx: string;
 }
 
+export interface RandomVariableRequestV2 {
+  count: number;
+  a: number;
+  b: number;
+  M: number;
+  function_name: string;
+  f: string;
+}
+
 export interface RandomVariableResponse {
   r1: number[];
   r2: number[];

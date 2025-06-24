@@ -29,7 +29,10 @@ ChartJS.register(
 );
 
 export default function RandomVariablesTab() {
-  const [selectedFunction, setSelectedFunction] = useState<string>('linear');
+  const [selectedFunction, setSelectedFunction] = useState<string>('2*x');
+  const [a, setA] = useState<number>(0);
+  const [b, setB] = useState<number>(1);
+  const [M, setM] = useState<number>(2);
   const [count, setCount] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
@@ -52,7 +55,8 @@ export default function RandomVariablesTab() {
     return null;
   };
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (e) => {
+    e.preventDefault();
     const validationError = validateInputs();
     if (validationError) {
       setError(validationError);
@@ -63,10 +67,13 @@ export default function RandomVariablesTab() {
     setError('');
 
     try {
-      const response = await apiService.generateRandomVariables({
+      const response = await apiService.generateRandomVariablesv2({
         count: parseInt(count),
-        method: 'acceptance_rejection',
-        fx: selectedFunction
+        a: a,
+        b: b,
+        M: M,
+        function_name: selectedFunction,
+        f: selectedFunction
       });
 
       setResult(response);
@@ -270,49 +277,84 @@ export default function RandomVariablesTab() {
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Variables Aleatorias - Método de Aceptación-Rechazo</h2>
 
-        <div className="mb-6 p-6 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl shadow-md">
+        <form onSubmit={handleGenerate} className="mb-6 p-6 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl shadow-md">
           <h3 className="text-lg font-bold text-blue-800 mb-4">Selecciona una función de densidad:</h3>
-          <select
+          <input
+            type="text"
             value={selectedFunction}
             onChange={(e) => setSelectedFunction(e.target.value)}
             className="w-full p-3 bg-white border border-blue-300 rounded-xl text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200"
-          >
-            <option value="linear">f(x) = 2x | Dominio: [0, 1]</option>
-            <option value="cuadratic">f(x) = -(x-2)^2 + 4 | Dominio: [0, 4]</option>
-            <option value="hyperbola">f(x) = 1/x | Dominio: [0.5, 3]</option>
-          </select>
-          <p className='text-sm text-blue-600 mt-2'>Se utiliza g(x) = 1</p>
-        </div>
+          />
+          <div className="flex flex-row gap-6">
+            {/* Campo A */}
+            <div className="flex-1 flex flex-col">
+              <label className="text-base font-semibold text-blue-700 mb-2">a</label>
+              <input
+                type="number"
+                value={a}
+                onChange={(e) => setA(+e.target.value)}
+                className="w-full px-4 py-2 border border-blue-300 rounded-xl bg-white text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
+              />
+            </div>
 
+            {/* Campo B */}
+            <div className="flex-1 flex flex-col">
+              <label className="text-base font-semibold text-blue-700 mb-2">b</label>
+              <input
+                type="number"
+                value={b}
+                onChange={(e) => setB(+e.target.value)}
+                className="w-full px-4 py-2 border border-blue-300 rounded-xl bg-white text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
+              />
+            </div>
 
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
-            Cantidad de números aleatorios a generar
-          </label>
-          <div className="flex space-x-4">
-            <input
-              type="number"
-              value={count}
-              onChange={(e) => {
-                setCount(e.target.value);
-                setError('');
-              }}
-              placeholder="Ej: 1000"
-              min="1"
-              max="10000"
-              className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-            <button
-              onClick={handleGenerate}
-              disabled={loading || !count}
-              className="flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-            >
-              {loading ? <LoadingSpinner size="sm" /> : <Zap className="w-5 h-5" />}
-              <span>{loading ? 'Generando...' : 'Generar'}</span>
-            </button>
+            {/* Campo M */}
+            <div className="flex-1 flex flex-col">
+              <label className="text-base font-semibold text-blue-700 mb-2">M</label>
+              <input
+                type="number"
+                value={M}
+                onChange={(e) => setM(+e.target.value)}
+                className="w-full px-4 py-2 border border-blue-300 rounded-xl bg-white text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition duration-200"
+              />
+            </div>
           </div>
-          <p className="text-xs text-gray-500 mt-2">Máximo: 10,000 números</p>
-        </div>
+
+
+
+          <p className='text-sm w-full text-blue-600 mt-2'>Se utiliza g(x) = 1</p>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Cantidad de números aleatorios a generar
+            </label>
+            <div className="flex space-x-4">
+              <input
+                type="number"
+                value={count}
+                onChange={(e) => {
+                  setCount(e.target.value);
+                  setError('');
+                }}
+                placeholder="Ej: 1000"
+                min="1"
+                max="10000"
+                className="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <button
+
+                disabled={loading || !count}
+                className="flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              >
+                {loading ? <LoadingSpinner size="sm" /> : <Zap className="w-5 h-5" />}
+                <span>{loading ? 'Generando...' : 'Generar'}</span>
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Máximo: 10,000 números</p>
+          </div>
+        </form>
+
+
 
         {error && <ErrorMessage message={error} className="mb-4" />}
       </div>
